@@ -26,7 +26,7 @@ export class Form {
       const validators = this.inputsData[input]; // функция валидирования из Validator
 
       validators.forEach(validator => {
-        isInputValid = validator(this.$form[input].value) && isInputValid;
+        isInputValid = validator(this.$form[input].value);
       });
 
       (isInputValid)
