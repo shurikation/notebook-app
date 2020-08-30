@@ -41,8 +41,8 @@ export class Form {
 
   showErrorWarning($input) {
     this.hideErrorWarning($input);
-    const error = `<p class="validation-error">Введите текст!</p>`;
     $input.classList.add('invalid-border');
+    const error = `<p class="validation-error">Введите текст!</p>`;
     $input.insertAdjacentHTML('afterEnd', error);
   }
 

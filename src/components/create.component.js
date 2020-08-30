@@ -26,8 +26,6 @@ export class CreateComponent extends Component {
         date: new Date().toLocaleDateString(),
         type: this.$el.type.value,
         ...this.form.getValue()
-        //добавляем title: "*random text*", fulltext: "*random text*"}
-        //...и получаем объект из 3 ключей + значения
       };
 
       await apiService.addPost(formData);
