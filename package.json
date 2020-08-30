@@ -1,7 +1,7 @@
 {
-  "name": "js-native-blog",
+  "name": "notebook-app",
   "version": "1.0.0",
-  "description": "js native blog",
+  "description": "simple notebook application",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production",
@@ -9,11 +9,11 @@
     "start": "webpack-dev-server --mode development --open"
   },
   "keywords": [
-    "js",
-    "blog",
-    "javascript"
+    "javascript",
+    "notebook",
+    "app"
   ],
-  "author": "Vladilen Mini",
+  "author": "Shurikation",
   "license": "ISC",
   "devDependencies": {
     "@babel/cli": "^7.2.3",
