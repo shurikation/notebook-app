@@ -17,7 +17,7 @@ class Api {
 
   async addPost(post) {
     try {
-      const request = new Request(`${this.url}/posts.json`, {
+      const request = new Request(`${this.url}posts.json`, {
         method: 'post',
         body: JSON.stringify(post)
       });
@@ -38,6 +38,10 @@ class Api {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  async changePostById(id) {
+
   }
 
   async useRequest(request) {

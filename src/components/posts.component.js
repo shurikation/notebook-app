@@ -16,12 +16,15 @@ export class PostsComponent extends Component {
 
   buttonClickHandler(event) {
     if(event.target.tagName !== 'BUTTON') return false;
-
     const postId = event.target.dataset.id;
 
     (confirm('Запись будет удалена. Вы уверены?'))
         ? this.onDelete(postId)
         : false
+  }
+
+  async onChange(id) {
+    
   }
 
   async onDelete(id) {
