@@ -18,18 +18,44 @@ export class PostsComponent extends Component {
     if(event.target.tagName !== 'BUTTON') return false;
     const postId = event.target.dataset.id;
 
-    (confirm('Запись будет удалена. Вы уверены?'))
-        ? this.onDelete(postId)
-        : false
+
+    console.log(event.target.dataset.type);
+    if (event.target.dataset.type === 'edit') {
+      this.changePostText(postId);
+      this.changeButtonText(event.target);
+    } else {
+      (confirm('Запись будет удалена. Вы уверены?'))
+          ? this.onDelete(postId)
+          : false
+    }
   }
 
-  async onChange(id) {
-    
+  changePostText(id) {
+    let currentPostText = this.$el.querySelector(`[data-postId=${id}] .post__text`);
+    let text = currentPostText.textContent;
+    let parent = currentPostText.parentNode;
+
+
+    let editorField = `<textarea style="color: black;display:flex;min-width:900px;resize:none">${text}</textarea>`;
+    currentPostText.remove();
+    parent.insertAdjacentHTML('afterBegin', editorField);
+    // currentPostText.parentNode.replaceChild(editorField, currentPostText);
+    // var e = document.getElementsByTagName('span')[0];
+    //
+    // var d = document.createElement('div');
+    // d.innerHTML = e.innerHTML;
+    //
+    // e.parentNode.replaceChild(d, e);
+
+  }
+
+  changeButtonText(button) {
+
   }
 
   async onDelete(id) {
     await apiService.deletePostById(id);
-    let currentPost = document.querySelector(`[data-postId=${id}]`);
+    let currentPost = this.$el.querySelector(`[data-postId=${id}]`);
     currentPost.remove();
 
     if(!this.isPostsExist()) this.showMessageEmpty();

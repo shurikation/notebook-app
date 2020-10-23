@@ -235,6 +235,14 @@ input[type=email], textarea {
     box-shadow: rgba(0, 0, 0, .8) 0 0 10px
 }
 
+.post__main {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 10px 0;
+}
+
 .form__container {
     padding: 0 10px 10px;
     margin: 0 auto

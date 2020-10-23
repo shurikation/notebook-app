@@ -1,7 +1,8 @@
-export function renderButton(post) {
+export function renderButton(id, type = 'delete', buttonText = 'Удалить') { //класс, текст
   return `<button 
-        data-id="${post.id}" 
+        data-id="${id}"
+        data-type="${type}" 
         class="button">
-            Удалить
+            ${buttonText}
         </button>`;
 }
