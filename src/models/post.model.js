@@ -3,8 +3,9 @@ import {renderButton} from "./button.model";
 
 export function renderPost(post) {
   const tag = renderTag(post);
-  const deleteButton = renderButton(post.id);
-  const editButton = renderButton(post.id, 'edit', 'Редактировать');
+
+  const deleteButton = renderButton(post.id, 'Удалить', 'button--delete');
+  const editButton = renderButton(post.id,  'Редактировать', 'button--edit');
 
   return `<section data-postId=${post.id} class="feed__post post">
  <div class="post__container">
@@ -17,9 +18,9 @@ export function renderPost(post) {
       <div class="post__main">
         <p class="post__text">${post.fulltext}</p>
       </div>
+      <span class="post__date">${post.date}</span>
       <footer class="post__footer">
-        <span class="post__date">${post.date}</span>
-         ${editButton}
+         ${editButton}  
          ${deleteButton}
       </footer>
     </div>

@@ -8,49 +8,66 @@ export class PostsComponent extends Component {
   constructor(id) {
     super(id);
     this.isShown = false;
+    this.textareaBottomMargin = 5;//px
   }
 
   init() {
-    this.$el.addEventListener('click', (event) => this.buttonClickHandler(event));
+    this.$el.addEventListener('click', (event) => this.buttonsClickHandler(event));
   }
 
-  buttonClickHandler(event) {
-    if(event.target.tagName !== 'BUTTON') return false;
-    const postId = event.target.dataset.id;
+  buttonsClickHandler(event) {
+    if (event.target.tagName !== 'BUTTON') return false;
 
+    const $button = event.target;
 
-    console.log(event.target.dataset.type);
-    if (event.target.dataset.type === 'edit') {
-      this.changePostText(postId);
-      this.changeButtonText(event.target);
-    } else {
-      (confirm('Запись будет удалена. Вы уверены?'))
-          ? this.onDelete(postId)
-          : false
+    if ($button.classList.contains('button--edit')) {
+      this.editButtonHandler($button);
+    } else if($button.classList.contains('button--delete')) {
+      this.deleteButtonHandler($button);
+    } else if($button.classList.contains('button--save')) {
+      this.saveButtonHandler($button);
     }
   }
 
-  changePostText(id) {
-    let currentPostText = this.$el.querySelector(`[data-postId=${id}] .post__text`);
-    let text = currentPostText.textContent;
-    let parent = currentPostText.parentNode;
+  editButtonHandler($button) {
+    const postID = $button.dataset.id;
+    this.editPostText(postID);
+    this.buttonsToggler($button);
+  }
 
-
-    let editorField = `<textarea style="color: black;display:flex;min-width:900px;resize:none">${text}</textarea>`;
-    currentPostText.remove();
-    parent.insertAdjacentHTML('afterBegin', editorField);
-    // currentPostText.parentNode.replaceChild(editorField, currentPostText);
-    // var e = document.getElementsByTagName('span')[0];
-    //
-    // var d = document.createElement('div');
-    // d.innerHTML = e.innerHTML;
-    //
-    // e.parentNode.replaceChild(d, e);
+  deleteButtonHandler($button) {
 
   }
 
-  changeButtonText(button) {
+  saveButtonHandler($button) {
+    this.buttonsToggler($button);
+    //1. Считать value из textarea
+    //2. Убрать textarea - вместо добавить блок с value из textarea (Front)
+    //3. Изменить текст поста на сервере (Back)
+  }
 
+  editPostText(id) {
+    const $currentPostText = this.$el.querySelector(`[data-postId=${id}] .post__text`);
+
+    const textHeight = $currentPostText.clientHeight;
+    const text = $currentPostText.textContent;
+    const parent = $currentPostText.parentNode;
+
+    const editorField = `<textarea style="max-width: 900px; min-height: ${textHeight + this.textareaBottomMargin}px;">${text}</textarea>`;
+    $currentPostText.remove();
+    parent.insertAdjacentHTML('afterBegin', editorField);
+  }
+
+  buttonsToggler($button) {
+    if ($button.classList.contains('button--edit')) {
+      $button.classList.remove('button--edit');
+      $button.classList.add('button--save');
+      $button.textContent = 'Сохранить';
+    } else if($button.classList.contains('button--save')) {
+      $button.classList.remove('button--save');
+      $button.classList.add('button--edit');
+      $button.textContent = 'Редактировать';
+    }
   }
 
   async onDelete(id) {
@@ -58,7 +75,7 @@ export class PostsComponent extends Component {
     let currentPost = this.$el.querySelector(`[data-postId=${id}]`);
     currentPost.remove();
 
-    if(!this.isPostsExist()) this.showMessageEmpty();
+    if (!this.isPostsExist()) this.showMessageEmpty();
   }
 
   onHide() {

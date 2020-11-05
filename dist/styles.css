@@ -216,6 +216,26 @@ input[type=email], textarea {
     border: none
 }
 
+.button:hover {
+    cursor: pointer;
+    background-color: #a9a9a9
+}
+
+.button--edit {
+    background-color: #417fbe;
+}
+
+.button--save {
+
+}
+
+.button--delete {
+    background-color: #c32300;
+}
+
+
+
+
 .notebook {
     margin-top: 30px
 }
@@ -300,16 +320,10 @@ input[type=email], textarea {
 
 .form__textarea {
     height: 200px;
-    resize: none
 }
 
 .form__select:hover {
     cursor: pointer
-}
-
-.button:hover {
-    cursor: pointer;
-    background-color: #a9a9a9
 }
 
 .form__button {
@@ -338,13 +352,14 @@ input[type=email], textarea {
 
 .post__footer {
     display: flex;
+    position: relative;
     justify-content: space-between;
     align-items: center;
     padding: 15px 0
 }
 
 .post__date {
-    font-size: 14px
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
