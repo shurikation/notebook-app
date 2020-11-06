@@ -41,19 +41,39 @@ export class PostsComponent extends Component {
 
   saveButtonHandler($button) {
     this.buttonsToggler($button);
+    const postID = $button.dataset.id;
+
+
+    this.savePostText(postID);
+
+  }
+
+  savePostText(id) {
+
     //1. Считать value из textarea
+    const $textArea = this.$el.querySelector(`textarea[data-postid=${id}]`);
+
+    const editedPost = `<p class="post__text">${$textArea.value}</p>`;
+    console.log(editedPost);
     //2. Убрать textarea - вместо добавить блок с value из textarea (Front)
+
+    const parent = $textArea.parentNode;
+    console.log($textArea.parentNode);
+    $textArea.remove();
+    parent.insertAdjacentHTML('afterBegin', editedPost);
+
+
     //3. Изменить текст поста на сервере (Back)
   }
 
   editPostText(id) {
-    const $currentPostText = this.$el.querySelector(`[data-postId=${id}] .post__text`);
+    const $currentPostText = this.$el.querySelector(`[data-postid=${id}] .post__text`);
 
     const textHeight = $currentPostText.clientHeight;
-    const text = $currentPostText.textContent;
+    const text = $currentPostText.innerHTML;
     const parent = $currentPostText.parentNode;
 
-    const editorField = `<textarea style="max-width: 900px; min-height: ${textHeight + this.textareaBottomMargin}px;">${text}</textarea>`;
+    const editorField = `<textarea data-postid=${id} style="max-width: 900px; min-height: ${textHeight + this.textareaBottomMargin}px;">${text}</textarea>`;
     $currentPostText.remove();
     parent.insertAdjacentHTML('afterBegin', editorField);
   }
@@ -72,7 +92,7 @@ export class PostsComponent extends Component {
 
   async onDelete(id) {
     await apiService.deletePostById(id);
-    let currentPost = this.$el.querySelector(`[data-postId=${id}]`);
+    let currentPost = this.$el.querySelector(`[data-postid=${id}]`);
     currentPost.remove();
 
     if (!this.isPostsExist()) this.showMessageEmpty();
