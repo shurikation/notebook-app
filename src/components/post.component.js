@@ -1,5 +1,5 @@
-import {renderTag} from "./tag.model";
-import {renderButton} from "./button.model";
+import {renderTag} from "./tag.component";
+import {renderButton} from "./button.component";
 
 export function renderPost(post) {
   const tag = renderTag(post);

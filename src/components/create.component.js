@@ -1,5 +1,5 @@
 import {Component} from '../core/component'
-import {Form} from '../core/form'
+import {FormComponent} from './form.component'
 import {Validator} from '../utils/validator'
 import {apiService} from '../utils/api'
 
@@ -12,7 +12,7 @@ export class CreateComponent extends Component {
   init() {
     this.$el.addEventListener('submit', (event) => this.submitHandler(event));
 
-    this.form = new Form(this.$el, {
+    this.form = new FormComponent(this.$el, {
       title: [Validator.validate],
       fulltext: [Validator.validate]
     });

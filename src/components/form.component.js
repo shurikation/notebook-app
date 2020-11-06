@@ -1,4 +1,4 @@
-export class Form {
+export class FormComponent {
   constructor(form, inputsData) {
     this.$form = form;
     this.inputsData = inputsData; //{title: "*some text*"}{fulltext: "*some text*"}
