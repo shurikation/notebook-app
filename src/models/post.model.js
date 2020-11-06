@@ -7,7 +7,7 @@ export function renderPost(post) {
   const deleteButton = renderButton(post.id, 'Удалить', 'button--delete');
   const editButton = renderButton(post.id,  'Редактировать', 'button--edit');
 
-  return `<section data-postId=${post.id} class="feed__post post">
+  return `<section data-postId=${post.id} data-postType=${post.type} class="feed__post post">
  <div class="post__container">
       <header class="post__header">
         <h3 class="post__title title">${post.title}</h3>

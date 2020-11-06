@@ -41,7 +41,6 @@ class Api {
   }
 
   async editPostById(id, post) {
-    console.log(`${this.url}posts/${id}.json`);
     try {
       const request = new Request(`${this.url}posts/${id}.json`, {
         method: 'put',

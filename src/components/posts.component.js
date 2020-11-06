@@ -22,16 +22,17 @@ export class PostsComponent extends Component {
 
     if ($button.classList.contains('button--edit')) {
       this.editButtonHandler($button);
-    } else if($button.classList.contains('button--delete')) {
+    } else if ($button.classList.contains('button--delete')) {
       this.deleteButtonHandler($button);
-    } else if($button.classList.contains('button--save')) {
+    } else if ($button.classList.contains('button--save')) {
       this.saveButtonHandler($button);
     }
   }
 
   editButtonHandler($button) {
     const postID = $button.dataset.id;
-    this.editPostText(postID);
+    this.editPost(postID, '.post__title');
+    this.editPost(postID, '.post__text');
     this.buttonsToggler($button);
   }
 
@@ -39,40 +40,49 @@ export class PostsComponent extends Component {
     const postID = $button.dataset.id;
 
     (confirm('Запись будет полностью удалена. Вы уверены?'))
-      ? this.onDelete(postID)
-      : false
+        ? this.onDelete(postID)
+        : false
   }
 
   saveButtonHandler($button) {
     const postID = $button.dataset.id;
     this.buttonsToggler($button);
-    const editedText = this.savePostText(postID);
-    this.onEdit(postID, editedText);
+    const editedTitle = this.savePost(postID, 'header');
+    const editedPostText = this.savePost(postID, 'div');
+    const editedPostType = this.$el.querySelector(`section[data-postId=${postID}`).getAttribute('data-postType');
+    this.onEdit(postID, editedTitle, editedPostText, editedPostType);
   }
 
-  savePostText(id) {
-    const $textArea = this.$el.querySelector(`textarea[data-postid=${id}]`);
+  savePost(id, postElem) {
+    const $textArea = this.$el.querySelector(`${postElem} textarea[data-postid=${id}]`);
+
+    const text = $textArea.value;
     const parent = $textArea.parentNode;
 
-    const editedPost = `<p class="post__text">${$textArea.value}</p>`;
+    let editedText = '';
+
+    (postElem === 'header')
+        ? editedText = `<h3 class="post__title title">${text}</h3>`
+        : editedText = `<p class="post__text">${text}</p>`;
+
     $textArea.remove();
-    parent.insertAdjacentHTML('afterBegin', editedPost);
+    parent.insertAdjacentHTML('afterBegin', editedText);
 
     return $textArea.value;
   }
 
-  editPostText(id) {
-    const $currentPostText = this.$el.querySelector(`[data-postid=${id}] .post__text`);
+  editPost(id, postElem) {
+    const $currentPostElem = this.$el.querySelector(`section[data-postid=${id}] ${postElem}`);
 
-    const textHeight = $currentPostText.clientHeight;
-    const text = $currentPostText.textContent;
-    const parent = $currentPostText.parentNode;
+    const textHeight = $currentPostElem.clientHeight;
+    const text = $currentPostElem.textContent;
+    const parent = $currentPostElem.parentNode;
 
     const editorField = `<textarea 
             data-postid=${id} 
-            style="max-width: 900px; 
-            min-height: ${textHeight + this.textareaBottomMargin}px;">${text}</textarea>`;
-    $currentPostText.remove();
+            style="max-width: 900px; min-height: ${textHeight}px;">${text}</textarea>`;
+
+    $currentPostElem.remove();
     parent.insertAdjacentHTML('afterBegin', editorField);
   }
 
@@ -81,7 +91,7 @@ export class PostsComponent extends Component {
       $button.classList.remove('button--edit');
       $button.classList.add('button--save');
       $button.textContent = 'Сохранить';
-    } else if($button.classList.contains('button--save')) {
+    } else if ($button.classList.contains('button--save')) {
       $button.classList.remove('button--save');
       $button.classList.add('button--edit');
       $button.textContent = 'Редактировать';
@@ -96,12 +106,12 @@ export class PostsComponent extends Component {
     if (!this.isPostsExist()) this.showMessageEmpty();
   }
 
-  async onEdit(id, text) {
+  async onEdit(id, title, text, type) {
     const formData = {
       date: new Date().toLocaleDateString(),
       fulltext: text,
-      title: 'TestTitle',
-      type: 'TestType'
+      title: title,
+      type: type
     };
 
     await apiService.editPostById(id, formData);
