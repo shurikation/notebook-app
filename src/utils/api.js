@@ -40,8 +40,18 @@ class Api {
     }
   }
 
-  async changePostById(id) {
+  async editPostById(id, post) {
+    console.log(`${this.url}posts/${id}.json`);
+    try {
+      const request = new Request(`${this.url}posts/${id}.json`, {
+        method: 'put',
+        body: JSON.stringify(post)
+      });
+      return await this.useRequest(request);
 
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async useRequest(request) {

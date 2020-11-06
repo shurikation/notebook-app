@@ -36,44 +36,42 @@ export class PostsComponent extends Component {
   }
 
   deleteButtonHandler($button) {
+    const postID = $button.dataset.id;
 
+    (confirm('Запись будет полностью удалена. Вы уверены?'))
+      ? this.onDelete(postID)
+      : false
   }
 
   saveButtonHandler($button) {
-    this.buttonsToggler($button);
     const postID = $button.dataset.id;
-
-
-    this.savePostText(postID);
-
+    this.buttonsToggler($button);
+    const editedText = this.savePostText(postID);
+    this.onEdit(postID, editedText);
   }
 
   savePostText(id) {
-
-    //1. Считать value из textarea
     const $textArea = this.$el.querySelector(`textarea[data-postid=${id}]`);
+    const parent = $textArea.parentNode;
 
     const editedPost = `<p class="post__text">${$textArea.value}</p>`;
-    console.log(editedPost);
-    //2. Убрать textarea - вместо добавить блок с value из textarea (Front)
-
-    const parent = $textArea.parentNode;
-    console.log($textArea.parentNode);
     $textArea.remove();
     parent.insertAdjacentHTML('afterBegin', editedPost);
 
-
-    //3. Изменить текст поста на сервере (Back)
+    return $textArea.value;
   }
 
   editPostText(id) {
     const $currentPostText = this.$el.querySelector(`[data-postid=${id}] .post__text`);
 
     const textHeight = $currentPostText.clientHeight;
-    const text = $currentPostText.innerHTML;
+    const text = $currentPostText.textContent;
     const parent = $currentPostText.parentNode;
 
-    const editorField = `<textarea data-postid=${id} style="max-width: 900px; min-height: ${textHeight + this.textareaBottomMargin}px;">${text}</textarea>`;
+    const editorField = `<textarea 
+            data-postid=${id} 
+            style="max-width: 900px; 
+            min-height: ${textHeight + this.textareaBottomMargin}px;">${text}</textarea>`;
     $currentPostText.remove();
     parent.insertAdjacentHTML('afterBegin', editorField);
   }
@@ -96,6 +94,17 @@ export class PostsComponent extends Component {
     currentPost.remove();
 
     if (!this.isPostsExist()) this.showMessageEmpty();
+  }
+
+  async onEdit(id, text) {
+    const formData = {
+      date: new Date().toLocaleDateString(),
+      fulltext: text,
+      title: 'TestTitle',
+      type: 'TestType'
+    };
+
+    await apiService.editPostById(id, formData);
   }
 
   onHide() {
